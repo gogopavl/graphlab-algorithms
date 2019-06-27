@@ -48,7 +48,7 @@ def pagerank_triple_apply(input_graph, reset_prob=0.15, threshold=1e-3,
     return g
 
 # Load graph
-g = gl.load_graph('http://snap.stanford.edu/data/email-Enron.txt.gz', 'snap')
+g = gl.load_graph('~/Documents/Dissertation/data/cit-Patents.txt', 'snap')
 g.edges['weight'] = 1.0
 
 # Run triple apply sssp
