@@ -12,7 +12,7 @@ Activate the conda environment and run any of the python scripts.
 
 ```
 source activate gl-env
-python file-to-run.py
+python file-to-run.py path/to/input/file
 ```
 
 ## SW Versions
