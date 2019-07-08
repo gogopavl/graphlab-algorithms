@@ -14,9 +14,12 @@ g = gl.load_graph(path, 'snap')
 
 # Source and destination vertices
 source_vertex_id = 1004
-destination_vertex_id = 1007
+destination_vertex_id = 3655
+max_depth = 2
 
-def has_neighbor(graph, source_vertex, destination_vertex):
+assert max_depth >= 1
+
+def is_reachable(graph, source_vertex, destination_vertex, max_depth):
     
     outgoing_edges = graph.get_edges(src_ids=[source_vertex])
     neighborhood_ids = outgoing_edges["__dst_id"]
@@ -24,16 +27,18 @@ def has_neighbor(graph, source_vertex, destination_vertex):
     if destination_vertex in neighborhood_ids:
         return True
     else:
-        for vertex in neighborhood_ids:
-            has_neighbor(graph.get_neighborhood(ids=[vertex]), vertex, destination_vertex)
+        if (max_depth > 1):
+            for vertex in neighborhood_ids:
+                if (is_reachable(graph.get_neighborhood(ids=[vertex]), vertex, destination_vertex, max_depth-1)):
+                    return True
     return False
 
 
-is_reachable = has_neighbor(g, source_vertex_id, destination_vertex_id)    
+result = is_reachable(g, source_vertex_id, destination_vertex_id, max_depth)    
 
 tic = time.time()
 
-if is_reachable:
+if result:
     print("Vertex {} is reachable from vertex {}".format(destination_vertex_id, source_vertex_id))
 else:
     print("Vertex {} cannot be reached from vertex {}".format(destination_vertex_id, source_vertex_id))
