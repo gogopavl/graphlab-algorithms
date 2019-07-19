@@ -27,53 +27,34 @@ def run_reachability_job (path_to_file, source_vertex, target_vertex, max_depth)
     
     toc = time.time()
 
-    g = gl.load_graph(path, 'snap')
+    graph = gl.load_graph(path, 'snap')
 
-    result = is_reachable(g, source_vertex, target_vertex, max_depth)    
+    sources_set = set([source_vertex]) # Start from source vertex - BFS
+    targets_set = set()
+
+    is_reachable = False
+
+    while max_depth > 0:
+        for vertex in sources_set:
+            outgoing_edges = graph.get_edges(src_ids=[vertex])
+            targets_set.update(list(outgoing_edges["__dst_id"]))
+        
+        if target_vertex in targets_set:
+            is_reachable = True
+            break
+        else:
+            sources_set = targets_set
+            targets_set = set()
+        max_depth -= 1
 
     tic = time.time()
 
-    if result:
-        print("Vertex {} is reachable from vertex {}".format(source_vertex, target_vertex))
+    if is_reachable:
+        print("Vertex {} is reachable from vertex {}".format(target_vertex, source_vertex))
     else:
-        print("Vertex {} cannot be reached from vertex {}".format(source_vertex, target_vertex))
+        print("Vertex {} cannot be reached from vertex {}".format(target_vertex, source_vertex))
 
     return "Total runtime: {} seconds".format(tic-toc)
-
-def is_reachable(graph, source_vertex, destination_vertex, max_depth):
-    """Recursive helper method used to traverse graph.
-
-    Parameters
-    ----------
-    graph : Graph type
-        The graph used
-    
-    source_vertex : Long type
-        The id of the source vertex
-    
-    target_vertex : Long type
-        The id of the target vertex
-    
-    max_depth : int type
-        The maximum recursion depth
-
-    Returns
-    -------
-    is_reachable : Boolean type
-        True if the target vertex is reachable from the source vertex, otherwise false
-    """
-    
-    outgoing_edges = graph.get_edges(src_ids=[source_vertex])
-    neighborhood_ids = outgoing_edges["__dst_id"]
-
-    if destination_vertex in neighborhood_ids:
-        return True
-    else:
-        if (max_depth > 1):
-            for vertex in neighborhood_ids:
-                if (is_reachable(graph.get_neighborhood(ids=[vertex]), vertex, destination_vertex, max_depth-1)):
-                    return True
-    return False
 
 if __name__ == '__main__':
 
