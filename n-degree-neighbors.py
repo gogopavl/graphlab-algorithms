@@ -3,7 +3,7 @@ import time
 import sys
 
 # Neighborhood list
-neighbors = list()
+neighbors = set()
 
 def run_ndegree_neigh_job (path_to_file, source_vertex, degree):
     """Finds the nth degree neighborhood on the specified graph using graphlab's API.
@@ -30,7 +30,7 @@ def run_ndegree_neigh_job (path_to_file, source_vertex, degree):
     g = gl.load_graph(path, 'snap')
 
     result = nth_neighborhood(g, source_vertex, degree)
-    print(neighbors)
+    print("Neighorhood length: {}\nNeighbors:\n{}".format(len(neighbors), neighbors))
 
     tic = time.time()
 
@@ -56,7 +56,7 @@ def nth_neighborhood(graph, source_vertex, degree):
     neighborhood_ids = outgoing_edges["__dst_id"]
 
     if degree is 1:
-        neighbors.extend(list(neighborhood_ids))
+        neighbors.update(list(neighborhood_ids))
         return
     else:
         for vertex in neighborhood_ids:
