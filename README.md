@@ -10,10 +10,32 @@ To install GraphLab follow steps as shown in [installation guide](https://turi.c
 
 Activate the conda environment and run any of the python scripts.
 
+### Activating the Virtual Environment
 ```
 source activate gl-env
-python file-to-run.py path/to/input/file
 ```
+
+### Running the Algorithms 
+
+- pagerank, connected-components, triangle-counting
+    ```
+    python script.py W /path/to/edgelist
+    ```
+    * where W is the number of workers (cores)
+    * e.g. `python pagerank.py 8 ~/data/soc-LiveJournal1.txt` (to execute on 8 cores)
+
+- single-source-shortest-path, reachability (sp version)
+    ```
+    python script.py W /path/to/edgelist S T
+    ```
+    * where S the source vertex id and T the target vertex id
+    * the DFS and BFS implementations of reachability also receive an additional argument M (max_depth) to limit the search depth
+
+- neighbors
+    ```
+    python neighbors.py W /path/to/edgelist S D
+    ```
+    * where S the source vertex id and D the neighborhood degree
 
 ## SW Versions
 
